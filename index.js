@@ -140,11 +140,27 @@ const createTable=(id)=>
 app.post('/add',(req,res)=>
 	{
 		const {id,task,due}=req.body;
+		var changingdate=new Date(due);
+		changingdate.setDate(changingdate.getDate()+1)
+		var dd = changingdate.getDate();
+		var mm = changingdate.getMonth()+1; 
+		var yyyy = changingdate.getFullYear();
+		if(dd<10) 
+		{
+		    dd='0'+dd;
+		} 
+
+		if(mm<10) 
+		{
+		    mm='0'+mm;
+		} 
+		changingdate = yyyy+'-'+mm+'-'+dd;
+		console.log(changingdate)
 		const tablename='user'+id;
 		database.insert(
 		{
 			task:task,
-			due:due
+			due:changingdate
 		})
 		.returning('*')
 		.into(tablename)
@@ -183,12 +199,15 @@ app.post('/delete',(req,res)=>
 	});
 app.post('/update',(req,res)=>
 	{
-		const {id,taskid,task}=req.body;
+		const {id,taskid,task,due}=req.body;
+		const duemodified=due.slice(0,8)+(parseInt(due.slice(-2))+1)
+		console.log('due'+duemodified)
 		database('user'+id)
 		  .where({ id: taskid })
-		  .update({ task: task }, ['id', 'task'])
-		  .then(()=>
+		  .update({ task: task ,due:duemodified}, ['id', 'task','due'])
+		  .then((u)=>
 		{
+			console.log(u)
 			getTasks(id,res)
 		})
 	});
