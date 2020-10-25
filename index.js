@@ -52,7 +52,7 @@ app.post('/login',(req,res)=>
 				}
 				else
 				{
-					rs.status(402).json('wrong password');
+					res.status(402).json('wrong password');
 				}
 			})
 		.catch(err=>res.status(400).json('error occured'))		
