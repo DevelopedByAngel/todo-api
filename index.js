@@ -246,4 +246,4 @@ const mail=(task,mail)=>
 	// });
 	console.log(mail+" sent for "+task)
 }
-app.listen(3000);
+app.listen(process.env.PORT);
