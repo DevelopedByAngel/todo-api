@@ -39,6 +39,8 @@ app.post('/login',(req,res)=>
 		database.select('*').from('logind').where('email','=',email)
 		.then(data=>
 			{
+				if(data.length===0)
+					res.status(400).json({severity:'ERROR',details:'Email not found'})
 				console.log(data)
 				const valid=password===jwt.verify(data[0].name,'spindle').password;
 				console.log(valid)
@@ -82,39 +84,33 @@ app.post('/register', (req, res)=>
 			.returning('*')
 			.then(user=>
 			{
-				console.log('logged in as '+user[0].name)
+				console.log("going in for",user[0])
 				if(user[0])
 				{
-					database.select('*').from('users').where('email','=',user[0].email)
-					.then(usergot=>
-					{
+					console.log('logged in as '+user[0].email)
 						// createTable(usergot[0].id)
-						var id=usergot[0].id;
+						console.log(user)
+						var id=user[0].id;
 						const tablename='user'+id;
-		database.select('*').from('users').where('id','=',parseInt(id))
-		.then(user=>
-		{
-			if(user)
-			{
-				database.schema.createTable(tablename,(table)=>
-				{
-					table.increments('id');
-					table.string('task');
-					table.date('due');
+						console.log("createTable",tablename)
+						console.log("going in for",user[0])
+						if(user[0])
+						{
+							database.schema.createTable(tablename,(table)=>
+							{
+								table.increments('id');
+								table.string('task');
+								table.date('due');
+							})
+							.then(()=>{console.log('table created for'+user[0].name);res.json(user[0])})
+							.catch(err=>console.log(err))
+						}
+					}
 				})
-				.then(console.log('table created for'+user[0].name))
-				.catch(err=>console.log(err))
-			}
-		})
-					})
-					.catch(err=>Error('error'))
-					res.json(user[0])
-				}
-			})
-			.catch(err =>Error('error'))
-		})
-		.then(trx.commit)
-		.catch(trx.rollback);
+				.catch(err =>Error('error'))
+				})
+				.then(trx.commit)
+				.catch(trx.rollback);
 	})
 		.catch(err=>res.status(400).json(err))
 	});
