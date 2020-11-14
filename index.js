@@ -12,10 +12,10 @@ const dateformat=require('dateformat');
 const database=knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : 'angel@111@ps',
-    database : 'spindle'
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+    rejectUnauthorized: false
+  }
   }
 });
 var mailtransport = nodemailer.createTransport({
