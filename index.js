@@ -229,21 +229,21 @@ database.select('*').from('users')
 	})
 const mail=(task,mail)=>
 {
-	// console.log('mailed');
-	// var mailOptions = {
-	//   from: 'remainderevent@gmail.com',
-	//   to: mail,
-	//   subject:"Remainder : "+task,
-	//   html:  '<p> Today is the due date for <strong> "'+task+'" </strong>.Hope this remainder was helpful.<p><br><br><p>Add your tasks and due date <a href="#">here</a> to keep you remainded</p>'
-	// };
+	console.log('mailed');
+	var mailOptions = {
+	  from: 'remainderevent@gmail.com',
+	  to: mail,
+	  subject:"Remainder : "+task,
+	  html:  '<p> Today is the due date for <strong> "'+task+'" </strong>.Hope this remainder was helpful.<p><br><br><p>Add your tasks and due date <a href="#">here</a> to keep you remainded</p>'
+	};
 
-	// mailtransport.sendMail(mailOptions, function(error, info){
-	//   if (error) {
-	//     console.log(error);
-	//   } else {
-	//     console.log('Email sent: ' + info.response);
-	//   }
-	// });
+	mailtransport.sendMail(mailOptions, function(error, info){
+	  if (error) {
+	    console.log(error);
+	  } else {
+	    console.log('Email sent: ' + info.response);
+	  }
+	});
 	console.log(mail+" sent for "+task)
 }
 app.listen(process.env.PORT);
