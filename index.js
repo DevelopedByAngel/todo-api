@@ -101,6 +101,7 @@ app.post('/register', (req, res)=>
 								table.increments('id');
 								table.string('task');
 								table.date('due');
+								table.boolean('done');
 							})
 							.then(()=>{console.log('table created for'+user[0].name);res.json(user[0])})
 							.catch(err=>console.log(err))
@@ -127,6 +128,7 @@ const createTable=(id)=>
 					table.increments('id');
 					table.string('task');
 					table.date('due');
+					table.boolean('done');
 				})
 				.then(console.log('table created for'+user[0].name))
 				.catch(err=>console.log(err))
@@ -156,7 +158,8 @@ app.post('/add',(req,res)=>
 		database.insert(
 		{
 			task:task,
-			due:due
+			due:due,
+			done:false
 		})
 		.returning('*')
 		.into(tablename)
@@ -195,12 +198,17 @@ app.post('/delete',(req,res)=>
 	});
 app.post('/update',(req,res)=>
 	{
-		const {id,taskid,task,due}=req.body;
+		const {id,taskid,task,due,done}=req.body;
+		var donesend;
+		if(done===undefined)
+			donesend=false
+		else
+			donesend=done
 		const duemodified=due.slice(0,8)+(parseInt(due.slice(-2))+1)
 		console.log('due'+duemodified)
 		database('user'+id)
 		  .where({ id: taskid })
-		  .update({ task: task ,due:due}, ['id', 'task','due'])
+		  .update({ task: task ,due:due, done=donesend}, ['id', 'task','due', 'done'])
 		  .then((u)=>
 		{
 			console.log(u)
