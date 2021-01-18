@@ -156,7 +156,7 @@ app.post('/add',(req,res)=>
 		database.insert(
 		{
 			task:task,
-			due:changingdate
+			due:due
 		})
 		.returning('*')
 		.into(tablename)
