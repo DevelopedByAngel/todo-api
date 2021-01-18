@@ -208,7 +208,7 @@ app.post('/update',(req,res)=>
 		console.log('due'+duemodified)
 		database('user'+id)
 		  .where({ id: taskid })
-		  .update({ task: task ,due:due, done=donesend}, ['id', 'task','due', 'done'])
+		  .update({ task: task ,due:due, done:donesend}, ['id', 'task','due', 'done'])
 		  .then((u)=>
 		{
 			console.log(u)
